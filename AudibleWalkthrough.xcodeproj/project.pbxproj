@@ -38,6 +38,7 @@
 		6E9527472173F75100688262 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9527462173F75100688262 /* LoginViewModel.swift */; };
 		6E9527492173F86000688262 /* LoginCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9527482173F86000688262 /* LoginCellView.swift */; };
 		6E95274B2173F87B00688262 /* LoginCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E95274A2173F87B00688262 /* LoginCellViewModel.swift */; };
+		6E95274D21740FB500688262 /* PageCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E95274C21740FB500688262 /* PageCellView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,6 +75,7 @@
 		6E9527462173F75100688262 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		6E9527482173F86000688262 /* LoginCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginCellView.swift; sourceTree = "<group>"; };
 		6E95274A2173F87B00688262 /* LoginCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCellViewModel.swift; sourceTree = "<group>"; };
+		6E95274C21740FB500688262 /* PageCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageCellView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,6 +208,7 @@
 			children = (
 				6E9527482173F86000688262 /* LoginCellView.swift */,
 				6E95274A2173F87B00688262 /* LoginCellViewModel.swift */,
+				6E95274C21740FB500688262 /* PageCellView.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -320,6 +323,7 @@
 				6E95274B2173F87B00688262 /* LoginCellViewModel.swift in Sources */,
 				6E01336C21698E04005666F1 /* LayoutConstraintMakerSupportable.swift in Sources */,
 				6E7CCACA216A9471008B2AC6 /* LoginView.swift in Sources */,
+				6E95274D21740FB500688262 /* PageCellView.swift in Sources */,
 				6E01336521698E04005666F1 /* LayoutConstraintSafeAreaItem.swift in Sources */,
 				6E01336721698E04005666F1 /* LayoutEdgeInsets.swift in Sources */,
 			);

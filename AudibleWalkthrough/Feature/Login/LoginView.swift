@@ -8,10 +8,6 @@
 
 import UIKit
 
-protocol LoginViewControllerProtocol: class {
-    func finishLoggingIn()
-}
-
 class LoginView: UIView {
     
     let collectionViewLayout: UICollectionViewFlowLayout
@@ -26,7 +22,7 @@ class LoginView: UIView {
     
     var viewModel: LoginViewModelProtocol {
         didSet {
-            collectionView.reloadData()
+            pageControl.numberOfPages = viewModel.pages.count + 1
         }
     }
     
@@ -45,12 +41,45 @@ class LoginView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    // MARK: Actions Buttons
+    
     @objc func skip() {
-        
+        pageControl.currentPage = viewModel.pages.count - 1
+        nextPage()
     }
     
     @objc func nextPage() {
         
+        if pageControl.currentPage == viewModel.pages.count {
+            return
+        }
+        
+        if pageControl.currentPage == viewModel.pages.count - 1 {
+            moveControlConstraintsOffScreen()
+            
+            UIView.animate(withDuration: 0.5,
+                           delay: 0,
+                           usingSpringWithDamping: 1,
+                           initialSpringVelocity: 1,
+                           options: .curveEaseOut,
+                           animations: {
+                            
+                self.layoutIfNeeded()
+            }, completion: nil)
+        }
+        
+        let indexPath = IndexPath(item: pageControl.currentPage + 1, section: 0)
+        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        pageControl.currentPage += 1
+    }
+    
+    //MARK: Private Methods
+    
+    private func moveControlConstraintsOffScreen() {
+        pageControlBottomAnchor?.constant = 40
+        skipButtonTopAnchor?.constant = -40
+        nextButtonTopAnchor?.constant = -40
     }
 }
 
@@ -112,7 +141,7 @@ extension LoginView: ViewCodable {
     
     func styles() {
         collectionView.backgroundColor = UIColor.white
-        
+
         pageControl.pageIndicatorTintColor = .lightGray
         pageControl.currentPageIndicatorTintColor = UIColor(red: 247/255, green: 154/255, blue: 27/255, alpha: 1)
         
@@ -125,7 +154,7 @@ extension LoginView: ViewCodable {
 extension LoginView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.pages.count
+        return viewModel.pages.count + 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -143,11 +172,50 @@ extension LoginView: UICollectionViewDelegateFlowLayout {
 
 extension LoginView: UICollectionViewDelegate {
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        self.endEditing(true)
+    }
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        
+        let pageNumber = Int(targetContentOffset.pointee.x / frame.width)
+        pageControl.currentPage = pageNumber
+        
+        if pageNumber == viewModel.pages.count {
+            moveControlConstraintsOffScreen()
+        } else {
+            pageControlBottomAnchor?.constant = 0
+            skipButtonTopAnchor?.constant = 16
+            nextButtonTopAnchor?.constant = 16
+        }
+        
+        UIView.animate(withDuration: 0.5,
+                       delay: 0,
+                       usingSpringWithDamping: 1,
+                       initialSpringVelocity: 1,
+                       options: .curveEaseOut,
+                       animations: {
+                        
+            self.layoutIfNeeded()
+        }, completion: nil)
+    }
+
 }
 
 extension LoginView: LoginViewControllerProtocol {
     
     func finishLoggingIn() {
         
+    }
+    
+    func collectionChanged() {
+        collectionView.collectionViewLayout.invalidateLayout()
+        
+        let indexPath = IndexPath(item: pageControl.currentPage, section: 0)
+        
+        DispatchQueue.main.async {
+            self.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+            self.collectionView.reloadData()
+        }
     }
 }

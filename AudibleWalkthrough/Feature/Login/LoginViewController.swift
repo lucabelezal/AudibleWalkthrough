@@ -8,10 +8,16 @@
 
 import UIKit
 
+protocol LoginViewControllerProtocol: class {
+    func finishLoggingIn()
+    func collectionChanged()
+}
+
 class LoginViewController: UIViewController {
     
     var mainView: LoginView?
     var pages: [Page]?
+    weak var delegate: LoginViewControllerProtocol?
     
     override func loadView() {
         super.loadView()
@@ -48,5 +54,9 @@ class LoginViewController: UIViewController {
         if let pages = pages {
             mainView?.viewModel = LoginViewModel(pages: pages)
         }
+    }
+    
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        delegate?.collectionChanged()
     }
 }
