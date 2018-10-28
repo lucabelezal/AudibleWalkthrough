@@ -86,6 +86,7 @@ class LoginView: UIView {
 extension LoginView: ViewCodable {
     
     func configure() {
+        collectionView.register(cellType: PageCellView.self)
         collectionView.register(cellType: LoginCellView.self)
         
         collectionViewLayout.scrollDirection = .horizontal
@@ -158,7 +159,15 @@ extension LoginView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(for: indexPath, cellType: LoginCellView.self)
+      
+        if indexPath.item == viewModel.pages.count {
+            let loginCell = collectionView.dequeueReusableCell(for: indexPath, cellType: LoginCellView.self)
+            return loginCell
+        }
+        
+        let cell = collectionView.dequeueReusableCell(for: indexPath, cellType: PageCellView.self)
+        cell.page = viewModel.pages[indexPath.item]
+        
         return cell
     }
 }
