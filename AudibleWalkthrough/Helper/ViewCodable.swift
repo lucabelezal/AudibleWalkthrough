@@ -18,8 +18,6 @@ protocol ViewCodable {
     func setupAcessibilityIdentifiers()
 }
 
-
-//MARK: - Default implementations
 extension ViewCodable {
     
     func setupView() {

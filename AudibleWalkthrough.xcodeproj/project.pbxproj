@@ -157,15 +157,11 @@
 		6E54698D2049A562007379E1 /* AudibleWalkthrough */ = {
 			isa = PBXGroup;
 			children = (
-				6E7CCADA216A9944008B2AC6 /* Reusable */,
+				6E54698E2049A562007379E1 /* AppDelegate.swift */,
 				6E7CCAC0216A9320008B2AC6 /* Feature */,
 				6E7CCABE216A9311008B2AC6 /* Model */,
 				6E01336F2169905A005666F1 /* Resources */,
-				6E01334E21698DE8005666F1 /* LayoutKit */,
-				6E54698E2049A562007379E1 /* AppDelegate.swift */,
-				6E01336D21699007005666F1 /* MainNavigationController.swift */,
-				6E7CCACE216A9582008B2AC6 /* ViewCodable.swift */,
-				6E7CCADF216A9ABD008B2AC6 /* LeftPaddedTextField.swift */,
+				6EA5002E21868643006524F5 /* Helper */,
 			);
 			path = AudibleWalkthrough;
 			sourceTree = "<group>";
@@ -201,6 +197,7 @@
 		6E7CCAC4216A941E008B2AC6 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				6E01336D21699007005666F1 /* MainNavigationController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -226,6 +223,17 @@
 				6E7CCAD0216A983C008B2AC6 /* UICollectionView+Reusable.swift */,
 			);
 			path = Reusable;
+			sourceTree = "<group>";
+		};
+		6EA5002E21868643006524F5 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				6E7CCADA216A9944008B2AC6 /* Reusable */,
+				6E01334E21698DE8005666F1 /* LayoutKit */,
+				6E7CCACE216A9582008B2AC6 /* ViewCodable.swift */,
+				6E7CCADF216A9ABD008B2AC6 /* LeftPaddedTextField.swift */,
+			);
+			path = Helper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
