@@ -13,6 +13,16 @@ class PageCellView: UICollectionViewCell, Reusable {
     let imageView: UIImageView
     let textView: UITextView
     let lineSeparatorView: UIView
+    let color: UIColor
+    
+    var attributedText: NSMutableAttributedString
+    var paragraphStyle: NSMutableParagraphStyle
+    
+    var viewModel: PageCellViewProtocol {
+        didSet {
+            updateView()
+        }
+    }
     
     var page: Page? {
         didSet {
@@ -24,6 +34,10 @@ class PageCellView: UICollectionViewCell, Reusable {
         self.imageView = UIImageView()
         self.textView = UITextView()
         self.lineSeparatorView = UIView()
+        self.color = UIColor(white: 0.2, alpha: 1)
+        self.attributedText = NSMutableAttributedString()
+        self.paragraphStyle = NSMutableParagraphStyle()
+        self.viewModel = PageCellViewModel()
         super.init(frame: frame)
         setupView()
     }
@@ -33,7 +47,18 @@ class PageCellView: UICollectionViewCell, Reusable {
     }
     
     func updateView() {
+        attributedText = NSMutableAttributedString(string: viewModel.title, attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.medium), NSAttributedStringKey.foregroundColor: color])
         
+        attributedText.append(NSAttributedString(string: "\n\n\(viewModel.message)", attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14), NSAttributedStringKey.foregroundColor: color]))
+        
+        paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+        
+        let length = attributedText.string.count
+        attributedText.addAttribute(NSAttributedStringKey.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: length))
+        
+        textView.attributedText = attributedText
+        imageView.image = UIImage(named: viewModel.imageName)
     }
 }
 

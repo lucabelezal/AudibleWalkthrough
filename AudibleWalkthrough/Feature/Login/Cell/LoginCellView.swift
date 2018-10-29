@@ -10,13 +10,19 @@ import UIKit
 
 class LoginCellView: UICollectionViewCell, Reusable {
     
-    //weak var delegate: LoginControllerDelegate?
-    
     let containerView: UIView
     let logoImageView: UIImageView
     let emailTextField: LeftPaddedTextField
     let passwordTextField: LeftPaddedTextField
     let loginButton: UIButton
+    
+    //weak var delegate: LoginControllerDelegate?
+    
+    var viewModel: LoginCellViewModelProtocol? {
+        didSet {
+            updateView()
+        }
+    }
     
     override init(frame: CGRect) {
         self.containerView = UIView()
@@ -34,6 +40,10 @@ class LoginCellView: UICollectionViewCell, Reusable {
     
     @objc func handleLogin() {
         //delegate?.finishLoggingIn()
+    }
+    
+    func updateView() {
+        
     }
 }
 

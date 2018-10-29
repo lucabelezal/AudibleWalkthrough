@@ -166,7 +166,7 @@ extension LoginView: UICollectionViewDataSource {
         }
         
         let cell = collectionView.dequeueReusableCell(for: indexPath, cellType: PageCellView.self)
-        cell.page = viewModel.pages[indexPath.item]
+        cell.viewModel = PageCellViewModel(page: viewModel.pages[indexPath.item])
         
         return cell
     }
