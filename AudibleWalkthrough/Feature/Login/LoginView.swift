@@ -8,7 +8,13 @@
 
 import UIKit
 
+protocol LoginViewProtocol: class {
+    func finishLoggingIn()
+}
+
 class LoginView: UIView {
+    
+    weak var delegate: LoginViewProtocol?
     
     let collectionViewLayout: UICollectionViewFlowLayout
     let collectionView: UICollectionView
@@ -22,10 +28,10 @@ class LoginView: UIView {
     
     var viewModel: LoginViewModelProtocol {
         didSet {
-            pageControl.numberOfPages = viewModel.pages.count + 1
+            updateView()
         }
     }
-    
+
     override init(frame: CGRect) {
         self.viewModel = LoginViewModel()
         self.collectionViewLayout = UICollectionViewFlowLayout()
@@ -41,6 +47,15 @@ class LoginView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    func updateView() {
+        
+        if viewModel.willTransition == true {
+            collectionChanged()
+        }
+        
+        pageControl.numberOfPages = viewModel.pages.count + 1
+    }
     
     // MARK: Actions Buttons
     
@@ -77,9 +92,20 @@ class LoginView: UIView {
     //MARK: Private Methods
     
     private func moveControlConstraintsOffScreen() {
-        pageControlBottomAnchor?.constant = 40
-        skipButtonTopAnchor?.constant = -40
-        nextButtonTopAnchor?.constant = -40
+        pageControlBottomAnchor?.constant = 82
+        skipButtonTopAnchor?.constant = -82
+        nextButtonTopAnchor?.constant = -82
+    }
+    
+    private func collectionChanged() {
+        collectionView.collectionViewLayout.invalidateLayout()
+        
+        let indexPath = IndexPath(item: pageControl.currentPage, section: 0)
+        
+        DispatchQueue.main.async {
+            self.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+            self.collectionView.reloadData()
+        }
     }
 }
 
@@ -120,20 +146,20 @@ extension LoginView: ViewCodable {
         
         pageControl.layout.makeConstraints { make in
             make.right.equalTo(self.layout.right)
-            make.left.equalTo(self.layout.left).reference(&pageControlBottomAnchor)
-            make.bottom.equalTo(self.layout.bottom)
+            make.left.equalTo(self.layout.left)
+            make.bottom.equalTo(self.layout.safeArea.bottom).reference(&pageControlBottomAnchor)
             make.height.equalTo(constant: 40)
         }
         
         skipButton.layout.makeConstraints { make in
-            make.top.equalTo(self.layout.top, constant: 16).reference(&skipButtonTopAnchor)
+            make.top.equalTo(self.layout.safeArea.top, constant: 8).reference(&skipButtonTopAnchor)
             make.left.equalTo(self.layout.left)
             make.width.equalTo(constant: 60)
             make.height.equalTo(constant: 50)
         }
         
         nextButton.layout.makeConstraints { make in
-            make.top.equalTo(self.layout.top, constant: 16).reference(&nextButtonTopAnchor)
+            make.top.equalTo(self.layout.safeArea.top, constant: 8).reference(&nextButtonTopAnchor)
             make.right.equalTo(self.layout.right)
             make.width.equalTo(constant: 60)
             make.height.equalTo(constant: 50)
@@ -142,7 +168,7 @@ extension LoginView: ViewCodable {
     
     func styles() {
         collectionView.backgroundColor = UIColor.white
-
+        
         pageControl.pageIndicatorTintColor = .lightGray
         pageControl.currentPageIndicatorTintColor = UIColor(red: 247/255, green: 154/255, blue: 27/255, alpha: 1)
         
@@ -162,6 +188,7 @@ extension LoginView: UICollectionViewDataSource {
       
         if indexPath.item == viewModel.pages.count {
             let loginCell = collectionView.dequeueReusableCell(for: indexPath, cellType: LoginCellView.self)
+            loginCell.delegate = self
             return loginCell
         }
         
@@ -208,23 +235,11 @@ extension LoginView: UICollectionViewDelegate {
             self.layoutIfNeeded()
         }, completion: nil)
     }
-
 }
 
-extension LoginView: LoginViewControllerProtocol {
+extension LoginView: LoginCellViewProtocol {
     
-    func finishLoggingIn() {
-        
-    }
-    
-    func collectionChanged() {
-        collectionView.collectionViewLayout.invalidateLayout()
-        
-        let indexPath = IndexPath(item: pageControl.currentPage, section: 0)
-        
-        DispatchQueue.main.async {
-            self.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-            self.collectionView.reloadData()
-        }
+    func DidLoggingIn() {
+        delegate?.finishLoggingIn()
     }
 }

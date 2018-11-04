@@ -10,13 +10,16 @@ import UIKit
 
 protocol LoginViewModelProtocol {
     var pages: [Page] { get set }
+    var willTransition: Bool { get set}
 }
 
 struct LoginViewModel: LoginViewModelProtocol {
     var pages: [Page]
+    var willTransition: Bool
     
     init() {
         self.pages = []
+        self.willTransition = false
     }
 }
 
@@ -24,5 +27,6 @@ extension LoginViewModel {
 
     init(pages: [Page]) {
         self.pages = pages
+        self.willTransition = false
     }
 }

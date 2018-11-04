@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol LoginCellViewProtocol: class  {
+    func DidLoggingIn()
+}
+
 class LoginCellView: UICollectionViewCell, Reusable {
     
     let containerView: UIView
@@ -16,7 +20,7 @@ class LoginCellView: UICollectionViewCell, Reusable {
     let passwordTextField: LeftPaddedTextField
     let loginButton: UIButton
     
-    //weak var delegate: LoginControllerDelegate?
+    weak var delegate: LoginCellViewProtocol?
     
     var viewModel: LoginCellViewModelProtocol? {
         didSet {
@@ -39,7 +43,7 @@ class LoginCellView: UICollectionViewCell, Reusable {
     }
     
     @objc func handleLogin() {
-        //delegate?.finishLoggingIn()
+        delegate?.DidLoggingIn()
     }
     
     func updateView() {
@@ -55,17 +59,17 @@ extension LoginCellView: ViewCodable {
     
     func hierarchy() {
         containerView.addView(logoImageView, emailTextField, passwordTextField, loginButton)
-        addView(containerView)
+        contentView.addView(containerView)
     }
     
     func constraints() {
         
         containerView.layout.makeConstraints { make in
-            make.centerX.equalTo(self.layout.centerX)
-            make.centerY.equalTo(self.layout.centerY)
-            make.right.equalTo(self.layout.right, constant: -32)
-            make.left.equalTo(self.layout.left, constant: 32)
-            make.bottom.greaterThanOrEqualTo(self.layout.bottom, constant: -64)
+            make.centerX.equalTo(contentView.layout.centerX)
+            make.centerY.equalTo(contentView.layout.centerY)
+            make.right.equalTo(contentView.layout.right, constant: -32)
+            make.left.equalTo(contentView.layout.left, constant: 32)
+            make.height.equalTo(constant: 390)
         }
         
         logoImageView.layout.makeConstraints { make in
@@ -76,7 +80,7 @@ extension LoginCellView: ViewCodable {
         }
         
         emailTextField.layout.makeConstraints { make in
-            make.top.equalTo(logoImageView.layout.bottom, constant: 8)
+            make.top.equalTo(logoImageView.layout.bottom, constant: 32)
             make.right.equalTo(containerView.layout.right)
             make.left.equalTo(containerView.layout.left)
             make.height.equalTo(constant: 50)
@@ -90,7 +94,7 @@ extension LoginCellView: ViewCodable {
         }
         
         loginButton.layout.makeConstraints { make in
-            make.top.equalTo(passwordTextField.layout.bottom, constant: 16)
+            make.top.equalTo(passwordTextField.layout.bottom, constant: 32)
             make.right.equalTo(containerView.layout.right)
             make.left.equalTo(containerView.layout.left)
             make.height.equalTo(constant: 50)

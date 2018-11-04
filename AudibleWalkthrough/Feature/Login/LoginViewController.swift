@@ -8,20 +8,15 @@
 
 import UIKit
 
-protocol LoginViewControllerProtocol: class {
-    func finishLoggingIn()
-    func collectionChanged()
-}
-
 class LoginViewController: UIViewController {
     
     var mainView: LoginView?
     var pages: [Page]?
-    weak var delegate: LoginViewControllerProtocol?
     
     override func loadView() {
         super.loadView()
         mainView = LoginView(frame: UIScreen.main.bounds)
+        mainView?.delegate = self
         view = mainView
     }
     
@@ -57,6 +52,24 @@ class LoginViewController: UIViewController {
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
-        delegate?.collectionChanged()
+        mainView?.viewModel.willTransition = true
+    }
+}
+
+extension LoginViewController: LoginViewProtocol {
+    
+    func finishLoggingIn() {
+        
+        let rootViewController = UIApplication.shared.keyWindow?.rootViewController
+        
+        guard let mainNavigationController = rootViewController as? MainNavigationController else {
+            return
+        }
+        
+        mainNavigationController.viewControllers = [HomeViewController()]
+        
+        UserDefaults.standard.setIsLoggedIn(value: true)
+        
+        dismiss(animated: true, completion: nil)
     }
 }
